@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>House Rules | CollabOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#213145",
+                    "on-surface-variant": "#3e4949",
+                    "secondary-fixed-dim": "#adc7f7",
+                    "surface-tint": "#006a6a",
+                    "primary-fixed-dim": "#76d6d5",
+                    "tertiary-container": "#a96039",
+                    "primary": "#006565",
+                    "on-surface": "#0b1c30",
+                    "background": "#f8f9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#d6e3ff",
+                    "surface-variant": "#d3e4fe",
+                    "secondary-container": "#b6d0ff",
+                    "inverse-primary": "#76d6d5",
+                    "on-tertiary-fixed": "#341100",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-secondary-fixed": "#001b3c",
+                    "tertiary-fixed-dim": "#ffb692",
+                    "on-secondary-fixed-variant": "#2d476f",
+                    "on-primary-container": "#e3fffe",
+                    "on-error-container": "#93000a",
+                    "secondary": "#455f88",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#f8f9ff",
+                    "surface-container-low": "#eff4ff",
+                    "on-tertiary-fixed-variant": "#733512",
+                    "on-primary": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "on-primary-fixed": "#002020",
+                    "tertiary-fixed": "#ffdbcb",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#fff9f7",
+                    "surface": "#f8f9ff",
+                    "outline": "#6e7979",
+                    "tertiary": "#8b4823",
+                    "on-secondary-container": "#3f5882",
+                    "on-primary-fixed-variant": "#004f4f",
+                    "primary-container": "#008080",
+                    "inverse-on-surface": "#eaf1ff",
+                    "primary-fixed": "#93f2f2",
+                    "outline-variant": "#bdc9c8",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container": "#e5eeff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "4px",
+                    "container-padding": "24px",
+                    "card-gap": "20px",
+                    "gutter": "16px",
+                    "sidebar-width": "260px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #0b1c30; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .sidebar-active { border-left: 4px solid #006565; background: rgba(0, 128, 128, 0.1); color: #93f2f2; font-weight: 600; }
+        .glass-header { backdrop-filter: blur(8px); background: rgba(248, 249, 255, 0.8); }
+        .section-anchor:target { scroll-margin-top: 100px; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #bdc9c8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6e7979; }
+    </style>
+</head>
+<body class="bg-background">
+<!-- Side Navigation Shell -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width bg-on-background dark:bg-inverse-surface shadow-sm z-50 overflow-y-auto">
+<div class="flex flex-col h-full py-6">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">corporate_fare</span>
+</div>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary-fixed leading-none">CollabOps</h1>
+<p class="text-xs text-outline-variant mt-1 uppercase tracking-widest">Enterprise Suite</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Navigation Items from JSON -->
+<a class="text-surface-variant hover:text-white flex items-center gap-3 px-6 py-3 hover:bg-on-secondary-fixed-variant/20 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="text-surface-variant hover:text-white flex items-center gap-3 px-6 py-3 hover:bg-on-secondary-fixed-variant/20 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-body-md text-body-md">Projects</span>
+</a>
+<a class="text-surface-variant hover:text-white flex items-center gap-3 px-6 py-3 hover:bg-on-secondary-fixed-variant/20 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Team</span>
+</a>
+<a class="text-surface-variant hover:text-white flex items-center gap-3 px-6 py-3 hover:bg-on-secondary-fixed-variant/20 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-body-md text-body-md">Monitoring</span>
+</a>
+<a class="text-surface-variant hover:text-white flex items-center gap-3 px-6 py-3 hover:bg-on-secondary-fixed-variant/20 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="border-l-4 border-primary bg-primary-container/10 text-primary-fixed font-semibold flex items-center gap-3 px-6 py-3 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="px-4 py-4 mt-auto border-t border-white/10">
+<button class="w-full bg-primary-container text-on-primary-container font-semibold py-2.5 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Project
+                </button>
+</div>
+<div class="mt-4 space-y-1">
+<a class="text-surface-variant hover:text-white flex items-center gap-3 px-6 py-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help Center</span>
+</a>
+<a class="text-error hover:bg-error/10 flex items-center gap-3 px-6 py-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface dark:bg-on-background border-b border-outline-variant flex items-center justify-between px-container-padding z-40 glass-header">
+<div class="flex items-center gap-8">
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-full text-sm focus:ring-1 focus:ring-primary" placeholder="Search regulations..." type="text"/>
+</div>
+<nav class="flex items-center gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all" href="#">Overview</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all" href="#">Schedule</a>
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-4 mt-4 transition-all" href="#">Resources</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-all text-on-surface-variant relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">history</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right">
+<p class="text-xs font-semibold text-on-surface">Admin User</p>
+<p class="text-[10px] text-outline">Super Admin</p>
+</div>
+<img class="w-9 h-9 rounded-full object-cover border-2 border-primary/20" data-alt="A professional headshot of a corporate administrator in a modern office, soft bokeh background, soft lighting, minimalist professional attire, clean aesthetic, teal and grey color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE86DdhcSQ6KdRLEpkQLU1e-E6-itQV5LdmIpPJZcWYcBt54JFuwQp4tdGY01hG3OUqKxo48egCNbyr9uKpuVG2juYAXUBAHC8SCgquGX3ya4DN3wl-iR35ASSRD99XKNkIxmOUtivGhtY1bGKYCbndNTONwzsXmF885FUV4fHDbNcF5zCuIboXMiJGwrqZBmHiHm_sl2Kzw6_iLcw_DRkM-vtPmp-j6-CfOdLcmD9NWjslIBuOUZQocNZ0OEQo2_WF6gEicUI1l8"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-16 min-h-screen">
+<!-- Content Header -->
+<section class="bg-white border-b border-outline-variant px-container-padding py-12">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-4">
+<nav class="flex items-center gap-2 text-on-surface-variant text-xs font-medium">
+<a class="hover:text-primary" href="#">Settings</a>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<a class="hover:text-primary" href="#">Compliance</a>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary">House Rules</span>
+</nav>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">House Rules</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                        Internal office regulations and professional conduct policies for all CollabOps employees. These rules ensure a productive, safe, and respectful work environment.
+                    </p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 bg-white border border-outline text-on-surface font-semibold rounded-lg hover:bg-surface-container-low transition-all flex items-center gap-2 active:scale-95">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Export PDF
+                    </button>
+<button class="px-6 py-2.5 bg-primary text-white font-semibold rounded-lg hover:brightness-110 transition-all shadow-sm flex items-center gap-2 active:scale-95">
+<span class="material-symbols-outlined text-lg">edit</span>
+                        Edit Rules
+                    </button>
+</div>
+</div>
+</section>
+<!-- Document Content -->
+<div class="px-container-padding py-12">
+<div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10">
+<!-- Table of Contents Sticky -->
+<aside class="md:col-span-3 hidden md:block">
+<div class="sticky top-28 space-y-6">
+<p class="text-xs font-bold uppercase tracking-widest text-outline">Contents</p>
+<ul class="space-y-4">
+<li><a class="text-sm font-medium text-primary flex items-center gap-2" href="#jam-kerja"><span class="w-1 h-1 bg-primary rounded-full"></span> Jam Kerja</a></li>
+<li><a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#kode-etik">Kode Etik</a></li>
+<li><a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#fasilitas">Fasilitas Kantor</a></li>
+<li><a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#cuti">Cuti &amp; Izin</a></li>
+<li><a class="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors" href="#keamanan">Keamanan &amp; IT</a></li>
+</ul>
+<div class="p-4 bg-primary-container/10 rounded-xl border border-primary/20 mt-8">
+<p class="text-xs font-bold text-on-primary-fixed mb-2">Last Updated</p>
+<p class="text-sm text-on-primary-fixed-variant">Oct 24, 2023</p>
+<p class="text-[10px] text-outline mt-2 italic">Approved by HR Director</p>
+</div>
+</div>
+</aside>
+<!-- Policy Sections -->
+<article class="md:col-span-9 space-y-16 pb-24">
+<!-- Section: Jam Kerja -->
+<section class="section-anchor" id="jam-kerja">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'opsz' 40;">schedule</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Jam Kerja &amp; Kehadiran</h3>
+</div>
+<div class="bg-white rounded-2xl p-8 shadow-sm border border-outline-variant/30 space-y-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-6 border-b border-outline-variant/30">
+<div>
+<h4 class="text-xs font-bold text-outline uppercase mb-2">Waktu Operasional</h4>
+<p class="text-body-md text-on-surface">Senin - Jumat: 09:00 - 18:00</p>
+<p class="text-body-md text-on-surface">Istirahat: 12:00 - 13:00</p>
+</div>
+<div>
+<h4 class="text-xs font-bold text-outline uppercase mb-2">Toleransi</h4>
+<p class="text-body-md text-on-surface">Keterlambatan maksimal 15 menit. Lebih dari 15 menit wajib melampirkan alasan ke sistem HR.</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="mt-1"><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div>
+<h5 class="font-semibold text-on-surface">Presensi Digital</h5>
+<p class="text-body-md text-on-surface-variant">Setiap karyawan wajib melakukan check-in melalui aplikasi CollabOps sebelum memulai aktivitas kerja.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="mt-1"><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div>
+<h5 class="font-semibold text-on-surface">Lembur (Overtime)</h5>
+<p class="text-body-md text-on-surface-variant">Lembur harus mendapatkan persetujuan tertulis dari Manager maksimal jam 16:00 pada hari tersebut.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Kode Etik -->
+<section class="section-anchor" id="kode-etik">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'opsz' 40;">gavel</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Kode Etik &amp; Profesionalisme</h3>
+</div>
+<div class="bg-white rounded-2xl p-8 shadow-sm border border-outline-variant/30">
+<div class="space-y-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<img class="w-full h-40 object-cover rounded-xl mb-4" data-alt="A minimalist and high-quality conceptual image representing professional integrity and collaboration. Abstract geometric glass shapes interlinking under clean studio lighting with a color palette of deep navy and soft teal. Professional corporate vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFcszqKQyL-amPuO8HOi1KSCgfPl2Gp7nlBIhu3D0nojpgAyHbNqo-FxB7ikNuSdW7HuQNgg9Vvm-Bg3YE-NaljH2oG3CcwtlVng_wjfhQSo7ujth-vVLvNPJ-wk0HAx1MGFVLnDJ_bXlYtReMyuNgapDq57HsfRz8MgNalo2YjXk3aYWQGoridDUfCIbmOiz5rInVkspDnpdaiUqwqlNwh4USPNRYECVS6S00nnhak0thrt-vjsbSBI7EDg3mdTVYHnUgCngTipM"/>
+<h5 class="font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">diversity_3</span>
+                                            Lingkungan Kerja Inklusif
+                                        </h5>
+<p class="text-body-md text-on-surface-variant">CollabOps melarang segala bentuk diskriminasi, pelecehan, dan perundungan. Kami menjunjung tinggi keberagaman dan rasa hormat antar rekan kerja.</p>
+</div>
+<div class="space-y-4">
+<img class="w-full h-40 object-cover rounded-xl mb-4" data-alt="A minimalist overhead shot of professional office attire accessories, a notebook, and a sleek modern pen arranged on a white marble surface. Clean, organized, professional aesthetic with ample white space. Soft teal accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0ghTyYRKhDz3SLItCpl9wCAQVjtiTAHwV1lqeEmACj1xnmfuYBY7todzZ2Iwlk9pXohdLoJd9Ww1ugmg5esjobmdZ3fa8WBfA0aQE92rFQdcCvYVM9DTpL9VJWx-sNVPXNaSZWtdlo2ooR-lWSK23GsuLzh_amIHVsGJM6ekiMk51KIxK7OKDfy_F2uTJ7vQdYf7ob3A6uD9Hj9RqbzEUUeFU0r1ULQItBoulGkGhnmewpHym6q1uGxwozaWCUanQaK7cTC7T5n8"/>
+<h5 class="font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">apparel</span>
+                                            Etika Berpakaian
+                                        </h5>
+<p class="text-body-md text-on-surface-variant">Karyawan diharapkan mengenakan pakaian Business Casual. Untuk hari Jumat diperbolehkan mengenakan Batik atau pakaian rapi bebas.</p>
+</div>
+</div>
+<div class="p-4 bg-error-container/20 rounded-xl border border-error/20">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-error">report</span>
+<div>
+<p class="text-sm font-bold text-error">Pelanggaran Berat</p>
+<p class="text-xs text-on-error-container mt-1">Pembocoran data rahasia perusahaan kepada pihak ketiga tanpa izin akan mengakibatkan pemutusan hubungan kerja (PHK) seketika.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Fasilitas Kantor -->
+<section class="section-anchor" id="fasilitas">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-2xl bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'opsz' 40;">domain</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">Fasilitas Kantor</h3>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30 hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-3xl text-outline group-hover:text-primary transition-colors mb-4">meeting_room</span>
+<h5 class="font-bold text-on-surface mb-2">Ruang Meeting</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed">Pemesanan wajib dilakukan melalui sistem minimal 2 jam sebelum penggunaan.</p>
+</div>
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30 hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-3xl text-outline group-hover:text-primary transition-colors mb-4">coffee</span>
+<h5 class="font-bold text-on-surface mb-2">Pantry &amp; Snack</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed">Fasilitas pantry gratis untuk seluruh karyawan. Harap menjaga kebersihan area setelah makan.</p>
+</div>
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-outline-variant/30 hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-3xl text-outline group-hover:text-primary transition-colors mb-4">print</span>
+<h5 class="font-bold text-on-surface mb-2">Alat Tulis &amp; IT</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed">Pengambilan alat tulis dapat dilakukan di meja resepsionis dengan mencatat inventaris.</p>
+</div>
+</div>
+</section>
+<!-- Feedback Callout -->
+<div class="bg-inverse-surface rounded-2xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative">
+<div class="absolute -right-10 -bottom-10 opacity-10">
+<span class="material-symbols-outlined text-[160px]">edit_note</span>
+</div>
+<div class="relative z-10 space-y-2">
+<h4 class="font-headline-md text-headline-md">Ada Pertanyaan Mengenai Aturan?</h4>
+<p class="text-surface-variant font-body-md">Hubungi Departemen People &amp; Culture jika Anda memerlukan klarifikasi lebih lanjut.</p>
+</div>
+<button class="relative z-10 px-8 py-3 bg-primary-fixed text-on-primary-fixed font-bold rounded-lg hover:brightness-110 transition-all active:scale-95">
+                            Hubungi HRD
+                        </button>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- Floating Action Button - Mobile Only context -->
+<button class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center active:scale-90 transition-all z-50">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<script>
+        // Simple Interaction logic
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                
+                // Update active state in sidebar (simplified)
+                document.querySelectorAll('aside nav a').forEach(a => a.classList.remove('sidebar-active'));
+                // In actual implementation, match target with nav label
+            });
+        });
+
+        // Top nav scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-sm');
+            } else {
+                header.classList.remove('shadow-sm');
+            }
+        });
+    </script>
+</body></html>

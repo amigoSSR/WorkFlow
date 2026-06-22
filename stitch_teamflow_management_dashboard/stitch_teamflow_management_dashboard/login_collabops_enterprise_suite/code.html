@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CollabOps | Enterprise Suite Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-error": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "surface-container": "#e5eeff",
+                "error": "#ba1a1a",
+                "on-secondary-fixed-variant": "#2d476f",
+                "surface-dim": "#cbdbf5",
+                "surface": "#f8f9ff",
+                "on-primary-fixed-variant": "#004f4f",
+                "on-error-container": "#93000a",
+                "on-background": "#0b1c30",
+                "inverse-on-surface": "#eaf1ff",
+                "primary-fixed-dim": "#76d6d5",
+                "tertiary-container": "#a96039",
+                "outline-variant": "#bdc9c8",
+                "surface-container-highest": "#d3e4fe",
+                "primary-fixed": "#93f2f2",
+                "primary": "#006565",
+                "secondary-container": "#b6d0ff",
+                "on-tertiary": "#ffffff",
+                "secondary": "#455f88",
+                "on-primary": "#ffffff",
+                "inverse-primary": "#76d6d5",
+                "surface-bright": "#f8f9ff",
+                "on-secondary-container": "#3f5882",
+                "surface-container-low": "#eff4ff",
+                "secondary-fixed": "#d6e3ff",
+                "surface-container-high": "#dce9ff",
+                "on-tertiary-fixed-variant": "#733512",
+                "on-secondary-fixed": "#001b3c",
+                "error-container": "#ffdad6",
+                "on-primary-container": "#e3fffe",
+                "inverse-surface": "#213145",
+                "tertiary-fixed": "#ffdbcb",
+                "primary-container": "#008080",
+                "background": "#f8f9ff",
+                "tertiary-fixed-dim": "#ffb692",
+                "outline": "#6e7979",
+                "on-surface-variant": "#3e4949",
+                "on-primary-fixed": "#002020",
+                "tertiary": "#8b4823",
+                "surface-variant": "#d3e4fe",
+                "surface-tint": "#006a6a",
+                "secondary-fixed-dim": "#adc7f7",
+                "on-tertiary-fixed": "#341100",
+                "on-surface": "#0b1c30",
+                "on-secondary": "#ffffff",
+                "on-tertiary-container": "#fff9f7"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "unit": "4px",
+                "sidebar-width": "260px",
+                "gutter": "16px",
+                "container-padding": "24px",
+                "card-gap": "20px"
+            },
+            "fontFamily": {
+                "label-md": ["Inter"],
+                "headline-lg-mobile": ["Inter"],
+                "headline-md": ["Inter"],
+                "headline-xl": ["Inter"],
+                "body-md": ["Inter"],
+                "headline-lg": ["Inter"],
+                "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #F8FAFC;
+            font-family: 'Inter', sans-serif;
+        }
+        .login-card-shadow {
+            box-shadow: 0px 1px 3px rgba(0,0,0,0.05), 0px 4px 6px rgba(0,0,0,0.02);
+        }
+        .btn-interaction:active {
+            transform: scale(0.98);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex items-center justify-center p-container-padding overflow-hidden">
+<!-- Atmospheric Background Decoration -->
+<div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+<div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute top-[60%] -right-[5%] w-[30%] h-[30%] rounded-full bg-secondary/5 blur-[100px]"></div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-[2px] bg-gradient-to-r from-transparent via-outline-variant/20 to-transparent"></div>
+</div>
+<!-- Login Container -->
+<main class="relative z-10 w-full max-w-[440px]">
+<!-- Brand Header (Above Card) -->
+<div class="text-center mb-8">
+<div class="inline-flex items-center gap-3 mb-2">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">deployed_code</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-background tracking-tight">CollabOps</h1>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Enterprise Operations Suite • v4.2.0</p>
+</div>
+<!-- Login Card -->
+<div class="bg-surface-container-lowest login-card-shadow rounded-xl p-8 md:p-10 border border-outline-variant/30 relative overflow-hidden">
+<!-- Subtle Identity Accent -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-primary-container to-secondary"></div>
+<div class="mb-8">
+<h2 class="font-headline-lg text-headline-lg text-on-background">Sign In</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Access your project dashboard and resources.</p>
+</div>
+<form class="space-y-6" id="loginForm" onsubmit="handleLogin(event)">
+<!-- Role Selector (Subtle) -->
+<div class="flex p-1 bg-surface-container-low rounded-lg border border-outline-variant/20">
+<button class="flex-1 py-2 px-4 rounded-md font-label-md text-label-md transition-all duration-200 bg-surface-container-lowest text-primary shadow-sm" id="roleUser" onclick="setRole('user')" type="button">
+                        Standard User
+                    </button>
+<button class="flex-1 py-2 px-4 rounded-md font-label-md text-label-md transition-all duration-200 text-on-surface-variant hover:text-on-surface" id="roleAdmin" onclick="setRole('admin')" type="button">
+                        Administrator
+                    </button>
+</div>
+<div class="space-y-4">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant ml-1" for="email">Email Address</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-[20px] group-focus-within:text-primary transition-colors">mail</span>
+</div>
+<input class="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center ml-1">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="password">Password</label>
+<a class="font-label-md text-label-md text-primary hover:underline transition-all" href="#">Forgot password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-[20px] group-focus-within:text-primary transition-colors">lock</span>
+</div>
+<input class="w-full pl-10 pr-10 py-3 bg-white border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Remember Me -->
+<div class="flex items-center">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary cursor-pointer" id="remember" type="checkbox"/>
+<label class="ml-2 font-body-md text-body-md text-on-surface-variant cursor-pointer select-none" for="remember">Remember this device for 30 days</label>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-primary-container text-white py-3.5 rounded-lg font-label-md text-label-md font-semibold btn-interaction transition-all flex items-center justify-center gap-2 hover:bg-primary shadow-md active:shadow-sm" id="submitBtn" type="submit">
+<span>Sign In to CollabOps</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<!-- SSO / Alternative Options -->
+<div class="mt-8 pt-8 border-t border-outline-variant/30">
+<p class="text-center font-label-md text-label-md text-on-surface-variant mb-4">Or continue with Enterprise SSO</p>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-2 py-2.5 px-4 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors">
+<img class="w-4 h-4" data-alt="A clean, minimalist vector logo of Google in its primary colors red, yellow, green, and blue, isolated on a white background for a professional corporate UI login screen." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPLh7AHdtOGbuymRu5jT-27DJcjPUril3ep1qoj3xATyqW9YCmoy5EgvjtNykk2Nm6RxyBBCn6O5kO5EpzGhcpfy0OtRTjQaxOCmQ6a5pySOHbonMuovhyrkneuVwmS0ZjR9j1WSCltbIxSXkNO-yMQT5BistkwJpDZakDZWXGITrOgQDLt_EqI4_q0zv1pDOlEJfPUJtntDvTtNcuoq0OCevYIYXYHkkS-M2FDbCr3csP0uScvNUbKyZ-Rt8937EEJK14LpeRhiU"/>
+                        Google
+                    </button>
+<button class="flex items-center justify-center gap-2 py-2.5 px-4 border border-outline-variant rounded-lg font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors">
+<img class="w-4 h-4" data-alt="A high-quality minimalist vector logo of Microsoft in its four-color window pane style, optimized for a corporate application interface login button." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFBRJiTUgLb3gILJ-WMxyt4GcNEtWm3qZjDdpkzbt9zhTuRhTYkxPLw_RovYWff-2C9rNAACUScAdVOXQiYTZNy3fwbfvSO7PqitynMGKFxOtx4exDPHgepHmHWxpIT0121vdrgHy1YsMUSeI8ExifhvY0ms717QcHRtkDy4LMTGxYiGQHrydvVWeU3c_EypryZiW7O9mFwmAVy5mbJMRvor2T7ZL4UZvmUNcqIqQwMB9w6DNgh0zrsSDKYpP3MNqbraHqVaZHpyI"/>
+                        Azure AD
+                    </button>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-10 text-center space-y-4">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                New to the platform? <a class="text-primary font-semibold hover:underline" href="#">Request an invite</a>
+</p>
+<div class="flex justify-center items-center gap-6 font-label-md text-label-md text-outline">
+<a class="hover:text-on-surface-variant transition-colors" href="#">Privacy Policy</a>
+<span class="w-1 h-1 rounded-full bg-outline/30"></span>
+<a class="hover:text-on-surface-variant transition-colors" href="#">Terms of Service</a>
+<span class="w-1 h-1 rounded-full bg-outline/30"></span>
+<a class="hover:text-on-surface-variant transition-colors" href="#">Security</a>
+</div>
+</footer>
+</main>
+<!-- Success Feedback Overlay (Hidden by default) -->
+<div class="fixed inset-0 bg-on-background/10 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300" id="loadingOverlay">
+<div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-4 border border-primary/20">
+<div class="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+<p class="font-headline-md text-headline-md text-on-background">Authenticating...</p>
+</div>
+</div>
+<script>
+        let currentRole = 'user';
+
+        function setRole(role) {
+            currentRole = role;
+            const userBtn = document.getElementById('roleUser');
+            const adminBtn = document.getElementById('roleAdmin');
+            
+            if (role === 'admin') {
+                adminBtn.classList.add('bg-surface-container-lowest', 'text-primary', 'shadow-sm');
+                adminBtn.classList.remove('text-on-surface-variant');
+                userBtn.classList.remove('bg-surface-container-lowest', 'text-primary', 'shadow-sm');
+                userBtn.classList.add('text-on-surface-variant');
+            } else {
+                userBtn.classList.add('bg-surface-container-lowest', 'text-primary', 'shadow-sm');
+                userBtn.classList.remove('text-on-surface-variant');
+                adminBtn.classList.remove('bg-surface-container-lowest', 'text-primary', 'shadow-sm');
+                adminBtn.classList.add('text-on-surface-variant');
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const overlay = document.getElementById('loadingOverlay');
+            const btn = document.getElementById('submitBtn');
+            
+            // Show loading state
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Processing...</span>
+            `;
+
+            // Simulate API call
+            setTimeout(() => {
+                const text = overlay.querySelector('p');
+                text.innerText = "Welcome back!";
+                overlay.querySelector('div.animate-spin').innerHTML = '<span class="material-symbols-outlined text-primary text-[40px]" style="font-variation-settings: \'FILL\' 1;">check_circle</span>';
+                overlay.querySelector('div.animate-spin').classList.remove('animate-spin', 'border-4', 'border-primary/20', 'border-t-primary');
+                
+                setTimeout(() => {
+                    // Reset or Redirect logic here
+                    alert(`Successfully logged in as ${currentRole.toUpperCase()}`);
+                    location.reload();
+                }, 1000);
+            }, 2000);
+        }
+    </script>
+</body></html>

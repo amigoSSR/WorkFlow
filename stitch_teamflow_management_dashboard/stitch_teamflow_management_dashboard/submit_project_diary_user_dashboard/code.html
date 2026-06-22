@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diary Proyek Saya - CollabOps</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9ff;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .drop-zone {
+            border: 2px dashed #bdc9c8;
+            transition: all 0.2s ease;
+        }
+        .drop-zone:hover {
+            border-color: #006565;
+            background-color: #00808005;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#e5eeff",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#2d476f",
+                      "surface-dim": "#cbdbf5",
+                      "surface": "#f8f9ff",
+                      "on-primary-fixed-variant": "#004f4f",
+                      "on-error-container": "#93000a",
+                      "on-background": "#0b1c30",
+                      "inverse-on-surface": "#eaf1ff",
+                      "primary-fixed-dim": "#76d6d5",
+                      "tertiary-container": "#a96039",
+                      "outline-variant": "#bdc9c8",
+                      "surface-container-highest": "#d3e4fe",
+                      "primary-fixed": "#93f2f2",
+                      "primary": "#006565",
+                      "secondary-container": "#b6d0ff",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#455f88",
+                      "on-primary": "#ffffff",
+                      "inverse-primary": "#76d6d5",
+                      "surface-bright": "#f8f9ff",
+                      "on-secondary-container": "#3f5882",
+                      "surface-container-low": "#eff4ff",
+                      "secondary-fixed": "#d6e3ff",
+                      "surface-container-high": "#dce9ff",
+                      "on-tertiary-fixed-variant": "#733512",
+                      "on-secondary-fixed": "#001b3c",
+                      "error-container": "#ffdad6",
+                      "on-primary-container": "#e3fffe",
+                      "inverse-surface": "#213145",
+                      "tertiary-fixed": "#ffdbcb",
+                      "primary-container": "#008080",
+                      "background": "#f8f9ff",
+                      "tertiary-fixed-dim": "#ffb692",
+                      "outline": "#6e7979",
+                      "on-surface-variant": "#3e4949",
+                      "on-primary-fixed": "#002020",
+                      "tertiary": "#8b4823",
+                      "surface-variant": "#d3e4fe",
+                      "surface-tint": "#006a6a",
+                      "secondary-fixed-dim": "#adc7f7",
+                      "on-tertiary-fixed": "#341100",
+                      "on-surface": "#0b1c30",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-container": "#fff9f7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "sidebar-width": "260px",
+                      "gutter": "16px",
+                      "container-padding": "24px",
+                      "card-gap": "20px"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant flex items-center justify-between px-container-padding z-50">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Diary Proyek Saya</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-6">
+<span class="font-label-md text-label-md text-primary border-b-2 border-primary pb-4 cursor-pointer">Overview</span>
+<span class="font-label-md text-label-md text-on-surface-variant hover:text-primary pb-4 cursor-pointer">Schedule</span>
+<span class="font-label-md text-label-md text-on-surface-variant hover:text-primary pb-4 cursor-pointer">Resources</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-all">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-surface-container-low p-2 rounded-full transition-all">help_outline</span>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a corporate employee in a brightly lit office setting, featuring a clean and modern professional aesthetic with soft focus on the background. The lighting is natural and high-key, using the brand's cool white and grey palette for a professional and trustworthy appearance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsslRyflUSzMiw5b2aX48uoBrJBVJT7G3ZgS5mcDhDoupBcWUsXrT5h7uhDRPPhZ3--gpmqvLaoZ5CHAyZZfspuvuaD21fk3Cnd777ZFFkQnGNGLgAc_X9RPXpaSMuFEu323Yw7WdgA2BaN4Wub7wnHhrweWKXw3vJHvrDpu-lXBvf9p0ztlxR29t4czNp3RtV2xXzot0q_ZRIYZ00J6q2eeauP76UB1RwEFLuUnCCHKWjRflCJoOUzjef4lfO1_PFC-mpOA5ygeI"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Side Navigation Bar -->
+<nav class="hidden md:flex fixed left-0 top-0 h-screen w-sidebar-width bg-on-background flex-col py-6 z-50">
+<div class="px-6 mb-8">
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary-fixed">CollabOps</h2>
+<p class="text-white/60 text-xs uppercase tracking-widest font-semibold">Enterprise Suite</p>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-6 py-3 text-surface-variant hover:text-white hover:bg-on-secondary-fixed-variant/20 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="border-l-4 border-primary bg-primary-container/10 text-primary-fixed font-semibold flex items-center gap-3 px-6 py-3 transition-colors" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-body-md text-body-md">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-surface-variant hover:text-white hover:bg-on-secondary-fixed-variant/20 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Team</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-surface-variant hover:text-white hover:bg-on-secondary-fixed-variant/20 transition-colors" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-body-md text-body-md">Monitoring</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-surface-variant hover:text-white hover:bg-on-secondary-fixed-variant/20 transition-colors" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-surface-variant hover:text-white hover:bg-on-secondary-fixed-variant/20 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+<div class="px-4 py-4">
+<button class="w-full py-3 px-4 bg-primary text-white rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="font-label-md">New Project</span>
+</button>
+</div>
+<div class="mt-auto flex flex-col gap-1 border-t border-white/10 pt-4">
+<a class="flex items-center gap-3 px-6 py-3 text-surface-variant hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-surface-variant hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-12 px-container-padding md:ml-sidebar-width min-h-screen">
+<div class="form-container">
+<!-- Header Section -->
+<div class="mb-8">
+<h2 class="font-headline-xl text-headline-xl text-on-background">Buat Laporan Harian</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2">Pastikan progres pekerjaan Anda tercatat dengan detail untuk sinkronisasi tim yang lebih baik.</p>
+</div>
+<!-- Main Form Card -->
+<div class="bg-white rounded-xl p-8 shadow-[0px_1px_3px_rgba(0,0,0,0.05),0px_4px_6px_rgba(0,0,0,0.02)]">
+<form class="space-y-6" id="diaryForm">
+<!-- Project Selection -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="project">PILIH PROYEK <span class="text-error">*</span></label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all cursor-pointer" id="project" name="project" required="">
+<option disabled="" selected="" value="">Pilih proyek yang sedang dikerjakan</option>
+<option value="1">Modern Enterprise ERP - Module Finance</option>
+<option value="2">Cloud Infrastructure Migration - Phase 2</option>
+<option value="3">Mobile App Redesign - User Experience Focus</option>
+<option value="4">Cybersecurity Audit &amp; Hardening</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Work Title -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="title">JUDUL PEKERJAAN <span class="text-error">*</span></label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" id="title" name="title" placeholder="Contoh: Implementasi API Integrasi Pembayaran" required="" type="text"/>
+</div>
+<!-- Detailed Progress -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="progress">DETAIL PROGRESS <span class="text-error">*</span></label>
+<textarea class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none" id="progress" name="progress" placeholder="Jelaskan langkah-langkah teknis atau tugas yang telah diselesaikan hari ini secara mendalam..." required="" rows="5"></textarea>
+</div>
+<!-- Obstacles / Challenges -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant" for="challenges">HAMBATAN &amp; TANTANGAN (OPSIONAL)</label>
+<textarea class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 text-on-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none" id="challenges" name="challenges" placeholder="Sebutkan kendala teknis atau koordinasi jika ada..." rows="3"></textarea>
+</div>
+<!-- File Upload Area -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-on-surface-variant">LAMPIRAN PENDUKUNG (GAMBAR/DOKUMEN)</label>
+<div class="drop-zone rounded-xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer" onclick="document.getElementById('fileUpload').click()">
+<input class="hidden" id="fileUpload" multiple="" type="file"/>
+<span class="material-symbols-outlined text-primary text-4xl">cloud_upload</span>
+<div class="text-center">
+<p class="font-body-md text-on-background font-semibold">Klik atau seret file ke sini untuk mengunggah</p>
+<p class="text-xs text-on-surface-variant mt-1">PNG, JPG, PDF, atau DOCX (Maksimal 10MB per file)</p>
+</div>
+</div>
+<div class="flex flex-wrap gap-3 mt-3" id="fileList">
+<!-- Files will be listed here via JS -->
+</div>
+</div>
+<!-- Submit Button -->
+<div class="pt-6 border-t border-outline-variant flex justify-end items-center gap-4">
+<button class="px-6 py-3 border border-secondary text-secondary rounded-lg font-label-md hover:bg-secondary/5 transition-all active:scale-95" type="button">Batal</button>
+<button class="px-10 py-3 bg-primary-container text-on-primary-container rounded-lg font-label-md hover:bg-primary/90 transition-all shadow-sm flex items-center gap-2 active:scale-95" type="submit">
+                            Submit Daily Report
+                            <span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Daily Quote / Information Tip -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-card-gap">
+<div class="bg-surface-container p-6 rounded-xl flex gap-4 items-start">
+<span class="material-symbols-outlined text-primary-container bg-white p-2 rounded-lg">lightbulb</span>
+<div>
+<h4 class="font-label-md text-label-md text-primary-container uppercase">Tips Laporan</h4>
+<p class="font-body-md text-body-md mt-1 text-on-secondary-container">Gunakan poin-poin (bullet points) untuk mempermudah atasan membaca ringkasan teknis Anda.</p>
+</div>
+</div>
+<div class="bg-tertiary-fixed p-6 rounded-xl flex gap-4 items-start">
+<span class="material-symbols-outlined text-tertiary bg-white p-2 rounded-lg">history</span>
+<div>
+<h4 class="font-label-md text-label-md text-tertiary uppercase">Laporan Terakhir</h4>
+<p class="font-body-md text-body-md mt-1 text-on-tertiary-fixed-variant">Kemarin: "Slicing UI Homepage" pada pukul 17:45 WIB.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Success Modal (Hidden by default) -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-on-background/40 backdrop-blur-sm" id="successModal">
+<div class="bg-white rounded-2xl p-10 max-w-md w-full shadow-2xl text-center transform scale-95 transition-transform duration-300">
+<div class="w-20 h-20 bg-primary-container/20 rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-primary-container text-5xl">check_circle</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-background mb-2">Laporan Terkirim!</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">Terima kasih telah memperbarui progres Anda. Laporan harian telah diteruskan ke Manajer Proyek.</p>
+<button class="w-full py-4 bg-primary text-white rounded-xl font-label-md hover:bg-primary/90 transition-all" onclick="closeModal()">Selesai</button>
+</div>
+</div>
+<script>
+        const diaryForm = document.getElementById('diaryForm');
+        const fileUpload = document.getElementById('fileUpload');
+        const fileList = document.getElementById('fileList');
+        const successModal = document.getElementById('successModal');
+
+        // Simple file list management
+        fileUpload.addEventListener('change', (e) => {
+            fileList.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center gap-2 bg-surface-container-highest px-3 py-1.5 rounded-full text-xs font-medium text-on-secondary-container';
+                item.innerHTML = `
+                    <span class="material-symbols-outlined text-sm">attachment</span>
+                    <span class="truncate max-w-[120px]">${file.name}</span>
+                    <span class="material-symbols-outlined text-sm cursor-pointer hover:text-error" onclick="this.parentElement.remove()">close</span>
+                `;
+                fileList.appendChild(item);
+            });
+        });
+
+        // Form submission handling
+        diaryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Show Modal
+            successModal.classList.remove('hidden');
+            setTimeout(() => {
+                successModal.firstElementChild.classList.remove('scale-95');
+                successModal.firstElementChild.classList.add('scale-100');
+            }, 10);
+        });
+
+        function closeModal() {
+            successModal.classList.add('hidden');
+            diaryForm.reset();
+            fileList.innerHTML = '';
+        }
+
+        // Drag and Drop Effects
+        const dropZone = document.querySelector('.drop-zone');
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('bg-primary/5', 'border-primary');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('bg-primary/5', 'border-primary');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileUpload.files = files;
+            // Manually trigger change
+            const event = new Event('change');
+            fileUpload.dispatchEvent(event);
+        });
+    </script>
+</body></html>
