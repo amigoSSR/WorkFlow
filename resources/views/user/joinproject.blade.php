@@ -93,6 +93,54 @@
     <!-- ================================ -->
     <div id="panel-join" class="p-container-padding">
 
+        <!-- ── JOIN WITH CODE CARD ───────────────────── -->
+        <div class="bg-gradient-to-br from-primary/5 to-secondary/5 border-2 border-primary/20 rounded-2xl p-6 mb-8">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <div class="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center shrink-0 shadow-md">
+                    <span class="material-symbols-outlined text-white text-[28px]">key</span>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-headline-md text-headline-md text-on-background mb-0.5">Punya Kode Join?</h3>
+                    <p class="text-body-md text-on-surface-variant">Masukkan kode unik 8 karakter yang diberikan oleh pemilik project.</p>
+                </div>
+                <form method="POST" action="{{ route('user.project.join') }}" class="flex flex-col sm:flex-row items-stretch gap-3 w-full md:w-auto" id="join-code-form">
+                    @csrf
+                    <div class="flex flex-col gap-2">
+                        <!-- Join Code Input -->
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">tag</span>
+                            <input
+                                type="text"
+                                name="join_code"
+                                id="join-code-input"
+                                maxlength="8"
+                                placeholder="Kode Join (8 karakter)"
+                                oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,''); checkPasswordField(this.value)"
+                                class="form-input pl-10 pr-4 py-3 border border-outline-variant rounded-lg text-body-md bg-white w-full sm:w-56 uppercase tracking-widest font-mono"
+                                required
+                            >
+                        </div>
+                        <!-- Password Input (shown when needed) -->
+                        <div id="join-password-wrapper" class="relative hidden">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">lock</span>
+                            <input
+                                type="password"
+                                name="join_password"
+                                id="join-password-input"
+                                placeholder="Password project (jika ada)"
+                                class="form-input pl-10 pr-4 py-3 border border-outline-variant rounded-lg text-body-md bg-white w-full sm:w-56"
+                            >
+                        </div>
+                    </div>
+                    <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-sm self-start sm:self-center whitespace-nowrap">
+                        <span class="material-symbols-outlined text-[18px]">login</span>
+                        Gabung Sekarang
+                    </button>
+                </form>
+            </div>
+            <p class="text-[11px] text-on-surface-variant mt-3 ml-0 md:ml-20">💡 Kode join akan muncul di notifikasi saat Anda membuat project, atau minta dari pemilik project.</p>
+        </div>
+
         <!-- Stats Row -->
         <div class="grid grid-cols-3 gap-card-gap mb-8">
             <div class="bg-white rounded-xl p-5 card-shadow flex items-center gap-4">
@@ -125,10 +173,12 @@
         </div>
 
         <!-- Search & Filter Bar -->
-        <div class="flex items-center gap-4 mb-6">
-            <div class="relative flex-1 max-w-sm">
+        <div class="flex items-center gap-3 mb-5">
+            <p class="text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Project yang Tersedia</p>
+            <div class="flex-1 h-px bg-outline-variant/40"></div>
+            <div class="relative">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
-                <input id="search-project" oninput="filterProjects()" type="text" placeholder="Cari nama project..." class="form-input w-full pl-10 pr-4 py-2.5 border border-outline-variant rounded-lg text-body-md bg-white">
+                <input id="search-project" oninput="filterProjects()" type="text" placeholder="Cari nama project..." class="form-input w-56 pl-10 pr-4 py-2.5 border border-outline-variant rounded-lg text-body-md bg-white">
             </div>
             <select id="filter-kategori" onchange="filterProjects()" class="form-input border border-outline-variant rounded-lg px-4 py-2.5 text-body-md bg-white text-on-surface">
                 <option value="">Semua Kategori</option>
@@ -137,24 +187,19 @@
                 <option value="Marketing">Marketing</option>
                 <option value="HR">HR</option>
             </select>
-            <select id="filter-status" onchange="filterProjects()" class="form-input border border-outline-variant rounded-lg px-4 py-2.5 text-body-md bg-white text-on-surface">
-                <option value="">Semua Status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-            </select>
         </div>
 
-        <!-- Project Grid -->
+        <!-- Project Discovery Grid (read-only — join via code) -->
         <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-card-gap">
             @forelse($projects as $project)
-            <!-- Project Card -->
-            <div class="project-card bg-white rounded-xl p-6 card-shadow border-2 border-transparent {{ $project->status == 'Inactive' ? 'opacity-75' : 'cursor-pointer' }}" data-id="{{ $project->id }}" data-name="{{ $project->name }}" data-members="{{ $project->users_count }}" data-max="{{ $project->max_members }}" data-status="{{ $project->status }}" data-kategori="{{ $project->category }}" onclick="selectProject(this)">
+            <div class="project-card bg-white rounded-xl p-6 card-shadow border-2 border-transparent"
+                data-name="{{ $project->name }}" data-status="{{ $project->status }}" data-kategori="{{ $project->category }}">
                 <div class="flex justify-between items-start mb-4">
                     <div class="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center">
                         <span class="material-symbols-outlined text-primary">folder</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="bg-{{ $project->status == 'Active' ? 'green' : 'gray' }}-100 text-{{ $project->status == 'Active' ? 'green' : 'gray' }}-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">{{ $project->status }}</span>
+                        <span class="bg-{{ $project->status == 'Active' ? 'green' : ($project->status == 'Completed' ? 'blue' : 'gray') }}-100 text-{{ $project->status == 'Active' ? 'green' : ($project->status == 'Completed' ? 'blue' : 'gray') }}-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">{{ $project->status }}</span>
                         <span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">{{ $project->category }}</span>
                     </div>
                 </div>
@@ -169,28 +214,28 @@
                         <div class="bg-primary h-full rounded-full" style="width: {{ ($project->users_count / max($project->max_members, 1)) * 100 }}%"></div>
                     </div>
                 </div>
-                <div class="flex items-center justify-between pt-3 border-t border-outline-variant/50">
-                    <div class="flex -space-x-2">
-                        <div class="w-7 h-7 rounded-full bg-surface-container text-on-surface text-[10px] font-bold flex items-center justify-center border-2 border-white">+{{ $project->users_count }}</div>
-                    </div>
-                    @if($project->status != 'Inactive' && $project->users_count < $project->max_members)
-                    <button onclick="event.stopPropagation(); openJoinModal('{{ $project->id }}', '{{ $project->name }}', '{{ $project->users_count }}', '{{ $project->max_members }}')" class="text-primary text-label-md font-bold flex items-center gap-1 hover:opacity-70 transition-opacity">
-                        Join <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-                    </button>
+                <!-- Info join via code -->
+                <div class="flex items-center gap-2 pt-3 border-t border-outline-variant/50">
+                    @if(in_array($project->id, $joinedProjectIds))
+                        <span class="material-symbols-outlined text-[16px] text-primary">check_circle</span>
+                        <span class="text-label-md text-primary font-bold">Sudah Bergabung</span>
+                    @elseif($project->join_password)
+                        <span class="material-symbols-outlined text-[16px] text-tertiary">lock</span>
+                        <span class="text-label-md text-tertiary font-bold">Password Protected</span>
                     @else
-                    <span class="text-label-md text-outline font-bold flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[16px]">lock</span> {{ $project->status == 'Inactive' ? 'Closed' : 'Penuh' }}
-                    </span>
+                        <span class="material-symbols-outlined text-[16px] text-outline">key</span>
+                        <span class="text-label-md text-outline">Perlu kode join</span>
                     @endif
-                </div>
-                <!-- Selected Indicator -->
-                <div class="selected-check hidden mt-3 text-center py-2 bg-primary/5 rounded-lg">
-                    <span class="text-primary text-label-md font-bold">✓ Dipilih</span>
+                    <div class="ml-auto w-7 h-7 rounded-full bg-surface-container text-on-surface text-[10px] font-bold flex items-center justify-center">
+                        {{ $project->users_count }}
+                    </div>
                 </div>
             </div>
             @empty
-            <div class="col-span-full text-center py-8">
-                <p class="text-on-surface-variant">Belum ada project yang dibuat.</p>
+            <div class="col-span-full text-center py-12">
+                <span class="material-symbols-outlined text-[56px] text-outline/40">folder_off</span>
+                <p class="text-headline-md font-headline-md text-on-surface-variant mt-3">Belum ada project yang tersedia</p>
+                <p class="text-body-md text-outline mt-1">Buat project baru atau masukkan kode join dari pemilik project</p>
             </div>
             @endforelse
         </div>
@@ -312,8 +357,27 @@
                             <p id="err-deadline" class="text-[11px] text-error hidden mt-1">❌ Deadline tidak boleh lebih awal dari hari ini</p>
                         </div>
 
-                        <!-- Budget -->
-                    
+                        <!-- Project Password (opsional) -->
+                        <div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-5">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="material-symbols-outlined text-[20px] text-primary">lock</span>
+                                <div>
+                                    <label class="text-label-md font-bold text-on-surface block" for="f-join-password">Password Project <span class="text-outline font-normal">(Opsional)</span></label>
+                                    <p class="text-[11px] text-on-surface-variant">Jika diisi, member harus memasukkan password ini saat join menggunakan kode.</p>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <input id="f-join-password" name="join_password" type="password"
+                                    placeholder="Masukkan password project (min. 4 karakter)..."
+                                    class="form-input w-full px-4 py-3 pr-12 border border-outline-variant rounded-lg text-body-md"
+                                    minlength="4" maxlength="50">
+                                <button type="button" onclick="togglePwdVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors">
+                                    <span id="pwd-eye" class="material-symbols-outlined text-[20px]">visibility</span>
+                                </button>
+                            </div>
+                            <p class="text-[11px] text-outline mt-1.5">🔑 Kode join akan di-generate otomatis. Password ini adalah lapisan keamanan tambahan.</p>
+                        </div>
+
                         <!-- Dokumen -->
                         <div>
                             <label class="text-label-md font-bold text-on-surface block mb-1.5">
@@ -391,48 +455,37 @@
         </div>
     </div>
 
-<!-- ================================ -->
-<!-- MODAL: KONFIRMASI JOIN           -->
-<!-- ================================ -->
-<div id="join-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="modal-overlay absolute inset-0 bg-on-background/50 backdrop-blur-sm" onclick="closeJoinModal()"></div>
-    <div class="modal-box relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 z-10">
-        <form method="POST" action="{{ route('user.project.join') }}">
-            @csrf
-            <input type="hidden" name="project_id" id="modal-project-id">
-            
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span class="material-symbols-outlined text-primary text-[32px]">group_add</span>
-                </div>
-                <h3 class="font-headline-md text-headline-md text-on-background">Konfirmasi Join Project</h3>
-                <p class="text-body-md text-on-surface-variant mt-2">Anda akan bergabung dengan:</p>
-                <p class="font-headline-md text-headline-md text-primary mt-1" id="modal-project-name">-</p>
-            </div>
-            <div class="bg-surface-container-low rounded-xl p-4 mb-6 space-y-2">
-                <div class="flex items-center justify-between text-body-md">
-                    <span class="text-on-surface-variant">Role yang diberikan</span>
-                    <span class="font-bold text-on-surface badge-medium px-2 py-0.5 rounded text-label-md">Member</span>
-                </div>
-                <div class="flex items-center justify-between text-body-md">
-                    <span class="text-on-surface-variant">Total member setelah join</span>
-                    <span class="font-bold text-primary" id="modal-after-members">-</span>
-                </div>
-                <div class="flex items-center justify-between text-body-md">
-                    <span class="text-on-surface-variant">Tanggal join</span>
-                    <span class="font-bold text-on-surface" id="modal-date">-</span>
-                </div>
-            </div>
-            <div class="flex gap-3">
-                <button type="button" onclick="closeJoinModal()" class="flex-1 py-3 border border-outline-variant rounded-lg font-semibold text-on-surface-variant hover:bg-surface-container transition-all">
-                    Batal
-                </button>
-                <button type="submit" class="flex-1 py-3 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-all active:scale-95">
-                    ✅ Ya, Join Sekarang
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <script src="{{ asset('js/joinproject.js') }}"></script>
+<script>
+    // Toggle password visibility in create form
+    function togglePwdVisibility() {
+        const inp = document.getElementById('f-join-password');
+        const eye = document.getElementById('pwd-eye');
+        if (inp.type === 'password') {
+            inp.type = 'text';
+            eye.textContent = 'visibility_off';
+        } else {
+            inp.type = 'password';
+            eye.textContent = 'visibility';
+        }
+    }
+
+    // Show/hide password field in join form based on code length
+    // (always show it so user can type — backend will decide if it's needed)
+    function checkPasswordField(val) {
+        const wrapper = document.getElementById('join-password-wrapper');
+        if (val.length >= 6) {
+            wrapper.classList.remove('hidden');
+        } else {
+            wrapper.classList.add('hidden');
+        }
+    }
+
+    // Auto-format join code input: uppercase + only alphanumeric
+    document.getElementById('join-code-input')?.addEventListener('paste', function(e) {
+        setTimeout(() => {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 8);
+            checkPasswordField(this.value);
+        }, 10);
+    });
+</script>

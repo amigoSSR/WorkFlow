@@ -23,7 +23,9 @@ class Project extends Model
         'document_path',
         'reference_links',
         'max_members',
-        'created_by'
+        'created_by',
+        'join_code',
+        'join_password',
     ];
 
     /**

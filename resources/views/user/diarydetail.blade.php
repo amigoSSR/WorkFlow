@@ -24,13 +24,25 @@
                 <p class="text-on-surface-variant font-body-lg text-body-lg max-w-2xl">{{ $project->description }}</p>
             </div>
             
-            <div class="bg-surface-container-low rounded-xl p-4 flex flex-col min-w-[200px]">
-                <span class="text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Role Anda</span>
-                @if($role == 'Owner')
-                    <span class="font-bold text-tertiary">👑 Mentor (Owner)</span>
-                @else
-                    <span class="font-bold text-secondary">👥 Menti (Member)</span>
-                @endif
+            <div class="flex flex-col gap-3 min-w-[200px]">
+                <div class="bg-surface-container-low rounded-xl p-4 flex flex-col">
+                    <span class="text-label-md text-on-surface-variant uppercase tracking-wider mb-1">Role Anda</span>
+                    @if($role == 'Owner')
+                        <span class="font-bold text-tertiary">👑 Mentor (Owner)</span>
+                    @else
+                        <span class="font-bold text-secondary">👥 Menti (Member)</span>
+                    @endif
+                </div>
+                
+                <div class="bg-primary/10 rounded-xl p-4 flex flex-col border border-primary/20">
+                    <span class="text-label-md text-primary uppercase tracking-wider mb-1">Project Code</span>
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="font-bold text-headline-sm text-primary tracking-widest" id="projectJoinCode">{{ $project->join_code }}</span>
+                        <button onclick="copyJoinCode()" class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors" title="Salin Kode">
+                            <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -116,11 +128,17 @@
                                     </p>
                                 </div>
                             </div>
-                            <span class="px-2 py-1 text-[10px] font-bold uppercase rounded border 
-                                {{ $ms->status == 'Done' ? 'border-green-200 text-green-700 bg-green-50' : 
-                                  ($ms->status == 'In Progress' ? 'border-orange-200 text-orange-700 bg-orange-50' : 'border-gray-200 text-gray-600 bg-gray-50') }}">
-                                {{ $ms->status }}
-                            </span>
+                            <form action="{{ route('user.diaryuser.milestone.update', $ms->id) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('PATCH')
+                                <select name="status" onchange="this.form.submit()" class="px-2 py-1 text-[10px] font-bold uppercase rounded border cursor-pointer outline-none focus:ring-1 focus:ring-primary
+                                    {{ $ms->status == 'Done' ? 'border-green-200 text-green-700 bg-green-50' : 
+                                      ($ms->status == 'In Progress' ? 'border-orange-200 text-orange-700 bg-orange-50' : 'border-gray-200 text-gray-600 bg-gray-50') }}">
+                                    <option value="Pending" {{ $ms->status == 'Pending' ? 'selected' : '' }} class="bg-white text-gray-700">Pending</option>
+                                    <option value="In Progress" {{ $ms->status == 'In Progress' ? 'selected' : '' }} class="bg-white text-orange-700">In Progress</option>
+                                    <option value="Done" {{ $ms->status == 'Done' ? 'selected' : '' }} class="bg-white text-green-700">Done</option>
+                                </select>
+                            </form>
                         </div>
                         @empty
                         <p class="text-body-md text-outline italic text-center py-2">Belum ada milestone di roadmap ini.</p>
@@ -289,6 +307,15 @@
     }
     function closeLinkModal() {
         document.getElementById('link-modal').classList.add('hidden');
+    }
+
+    function copyJoinCode() {
+        const code = document.getElementById('projectJoinCode').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            alert('Kode Project berhasil disalin: ' + code);
+        }).catch(err => {
+            console.error('Gagal menyalin: ', err);
+        });
     }
 </script>
 

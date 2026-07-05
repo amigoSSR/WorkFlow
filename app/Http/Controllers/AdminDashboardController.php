@@ -24,22 +24,107 @@ class AdminDashboardController extends Controller
      */
     public function index()
     {
-        // Activity analytics for chart (last 7 days)
+        // ── Stats Cards ──────────────────────────────────────────────
+        $totalProjects    = \App\Models\Project::count();
+        $completedProjects = \App\Models\Project::where('status', 'Completed')->count();
+        $totalMembers     = \App\Models\User::where('role', 'user')->count();
+
+        // Today's activities = diary entries + milestones created today
+        $todayActivities  = \App\Models\Diary::whereDate('created_at', today())->count()
+                          + \App\Models\Milestone::whereDate('created_at', today())->count();
+
+        // ── Activity Chart (last 30 days) ─────────────────────────────
         $chartLabels = [];
-        $chartData = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = \Carbon\Carbon::today()->subDays($i);
-            $chartLabels[] = $date->format('D, d M');
-            $diaryCount = \App\Models\Diary::whereDate('created_at', $date)->count();
-            $milestoneCount = \App\Models\Milestone::whereDate('created_at', $date)->count();
-            $chartData[] = $diaryCount + $milestoneCount;
+        $chartData   = [];
+        for ($i = 29; $i >= 0; $i--) {
+            $date          = \Carbon\Carbon::today()->subDays($i);
+            $chartLabels[] = $date->format('d M');
+            $chartData[]   = \App\Models\Diary::whereDate('created_at', $date)->count()
+                           + \App\Models\Milestone::whereDate('created_at', $date)->count();
         }
 
-        $totalActivities = \App\Models\Diary::count() + \App\Models\Milestone::count();
-        $todayActivities = \App\Models\Diary::whereDate('created_at', today())->count() + 
-                           \App\Models\Milestone::whereDate('created_at', today())->count();
+        // ── Recent Today Activities Feed ──────────────────────────────
+        $diariesToday = \App\Models\Diary::with(['user', 'project'])
+            ->whereDate('created_at', today())
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(fn($d) => (object)[
+                'type'       => 'diary',
+                'title'      => $d->title,
+                'sub'        => optional($d->user)->name . ' — ' . optional($d->project)->name,
+                'created_at' => $d->created_at,
+                'icon'       => 'edit_square',
+                'color'      => 'bg-primary-fixed-dim text-on-primary-fixed-variant',
+            ]);
 
-        return view('admin.admin_dashboard', compact('chartLabels', 'chartData', 'totalActivities', 'todayActivities'));
+        $milestonesToday = \App\Models\Milestone::with(['creator', 'project'])
+            ->whereDate('created_at', today())
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(fn($m) => (object)[
+                'type'       => 'milestone',
+                'title'      => 'Milestone: ' . $m->title,
+                'sub'        => optional($m->creator)->name . ' — ' . optional($m->project)->name,
+                'created_at' => $m->created_at,
+                'icon'       => 'flag',
+                'color'      => 'bg-secondary-fixed-dim text-on-secondary-fixed-variant',
+            ]);
+
+        $todayFeed = $diariesToday->concat($milestonesToday)
+            ->sortByDesc('created_at')
+            ->take(8)
+            ->values();
+
+        // ── Upcoming Calendar Events (next 3) ─────────────────────────
+        $upcomingEvents = \App\Models\Event::upcoming()->take(3)->get();
+
+        // ── House Rules Preview (top 3 active) ────────────────────────
+        $houseRulesPreview = \App\Models\HouseRule::active()->ordered()->take(3)->get();
+
+        // ── Piket Today ───────────────────────────────────────────────
+        $todayDayName   = strtolower(\Carbon\Carbon::today()->locale('id')->isoFormat('dddd'));
+        // map Carbon locale name → piket day column values
+        $dayMap = [
+            'senin'  => 'senin',
+            'selasa' => 'selasa',
+            'rabu'   => 'rabu',
+            'kamis'  => 'kamis',
+            'jumat'  => 'jumat',
+            'sabtu'  => 'sabtu',
+            'minggu' => null,
+        ];
+        $todayPiketDay  = $dayMap[$todayDayName] ?? null;
+
+        // Determine odd/even week
+        $weekNumber = (int) \Carbon\Carbon::today()->weekOfYear;
+        $weekType   = ($weekNumber % 2 !== 0) ? 'ganjil' : 'genap';
+
+        $piketToday = collect();
+        if ($todayPiketDay) {
+            $piketToday = \App\Models\Piket::with('user')
+                ->where('day', $todayPiketDay)
+                ->where(function ($q) use ($weekType) {
+                    $q->where('week_type', 'none')
+                      ->orWhere('week_type', $weekType);
+                })
+                ->get();
+        }
+
+        return view('admin.admin_dashboard', compact(
+            'totalProjects',
+            'completedProjects',
+            'totalMembers',
+            'todayActivities',
+            'chartLabels',
+            'chartData',
+            'todayFeed',
+            'upcomingEvents',
+            'houseRulesPreview',
+            'piketToday',
+            'todayDayName',
+        ));
     }
 
     /**
@@ -113,7 +198,90 @@ class AdminDashboardController extends Controller
      */
     public function houseRules()
     {
-        return view('admin.houseRule');
+        $houseRules = \App\Models\HouseRule::with('creator:id,name')
+            ->ordered()
+            ->paginate(15);
+
+        return view('admin.houseRule', compact('houseRules'));
+    }
+
+    /**
+     * Show form to create a new house rule
+     */
+    public function createHouseRule()
+    {
+        return view('admin.house-rules.create');
+    }
+
+    /**
+     * Store a newly created house rule
+     */
+    public function storeHouseRule(\Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'judul_rule' => 'required|string|max:255',
+            'deskripsi_rule' => 'required|string',
+            'kategori' => 'required|string|max:100',
+            'order_column' => 'nullable|integer|min:0',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        $validated['dibuat_oleh'] = auth()->id();
+        $validated['is_active'] = $request->has('is_active');
+        $validated['order_column'] = $validated['order_column'] ?? 0;
+
+        \App\Models\HouseRule::create($validated);
+
+        return redirect()->route('admin.house.rules')
+            ->with('success', 'House rule berhasil ditambahkan.');
+    }
+
+    /**
+     * Display the specified house rule
+     */
+    public function showHouseRule(\App\Models\HouseRule $houseRule)
+    {
+        $houseRule->load('creator:id,name');
+        return view('admin.house-rules.show', compact('houseRule'));
+    }
+
+    /**
+     * Show form to edit the specified house rule
+     */
+    public function editHouseRule(\App\Models\HouseRule $houseRule)
+    {
+        return view('admin.house-rules.edit', compact('houseRule'));
+    }
+
+    /**
+     * Update the specified house rule
+     */
+    public function updateHouseRule(\Illuminate\Http\Request $request, \App\Models\HouseRule $houseRule)
+    {
+        $validated = $request->validate([
+            'judul_rule' => 'sometimes|required|string|max:255',
+            'deskripsi_rule' => 'sometimes|required|string',
+            'kategori' => 'sometimes|required|string|max:100',
+            'order_column' => 'nullable|integer|min:0',
+        ]);
+        
+        $validated['is_active'] = $request->has('is_active');
+
+        $houseRule->update($validated);
+
+        return redirect()->route('admin.house.rules')
+            ->with('success', 'House rule berhasil diperbarui.');
+    }
+
+    /**
+     * Remove the specified house rule
+     */
+    public function destroyHouseRule(\App\Models\HouseRule $houseRule)
+    {
+        $houseRule->delete();
+
+        return redirect()->route('admin.house.rules')
+            ->with('success', 'House rule berhasil dihapus.');
     }
 
     /**

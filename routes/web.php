@@ -13,20 +13,17 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Alias for user dashboard (some views reference `user.dashboard`)
-Route::get('/user/dashboard', function () {
-    return view('user.dashboarduser');
-})->middleware(['auth', 'verified'])->name('user.dashboard');
+Route::get('/user/dashboard', [App\Http\Controllers\UserDashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('user.dashboard');
 
 // User Routes
 Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboarduser', function () {
-        return view('user.dashboarduser');         
-    })->name('dashboard');
+    Route::get('/dashboarduser', [App\Http\Controllers\UserDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/diaryuser', [App\Http\Controllers\DiaryController::class, 'index'])->name('diaryuser');
     Route::get('/diaryuser/{id}', [App\Http\Controllers\DiaryController::class, 'show'])->name('diaryuser.show');
     Route::post('/diaryuser/{id}/roadmap', [App\Http\Controllers\DiaryController::class, 'storeRoadmap'])->name('diaryuser.roadmap.store');
     Route::post('/diaryuser/{id}/milestone', [App\Http\Controllers\DiaryController::class, 'storeMilestone'])->name('diaryuser.milestone.store');
+    Route::patch('/diaryuser/milestone/{milestone}', [App\Http\Controllers\DiaryController::class, 'updateMilestoneStatus'])->name('diaryuser.milestone.update');
     Route::post('/diaryuser/{id}/link', [App\Http\Controllers\DiaryController::class, 'storeLink'])->name('diaryuser.link.store');
 
     Route::get('/joinproject', [App\Http\Controllers\ProjectController::class, 'index'])->name('joinproject');
@@ -41,12 +38,41 @@ Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(fu
     })->name('calendar');
 
     Route::get('/houseRule', function () {
-        return view('user.houseRule');   
+        $houseRules = \App\Models\HouseRule::ordered()->get();
+        return view('user.houseRule', compact('houseRules'));   
     })->name('houseRule');
 
     Route::get('/piket_schedule', function () {
-        return view('user.JadwalPiket');           
+        $pikets = \App\Models\Piket::with('user')->get();
+
+        $schedule = [
+            'senin'        => $pikets->where('day', 'senin')->where('week_type', 'none'),
+            'selasa'       => $pikets->where('day', 'selasa')->where('week_type', 'none'),
+            'rabu'         => $pikets->where('day', 'rabu')->where('week_type', 'none'),
+            'kamis'        => $pikets->where('day', 'kamis')->where('week_type', 'none'),
+            'jumat_ganjil' => $pikets->where('day', 'jumat')->where('week_type', 'ganjil'),
+            'jumat_genap'  => $pikets->where('day', 'jumat')->where('week_type', 'genap'),
+            'sabtu_ganjil' => $pikets->where('day', 'sabtu')->where('week_type', 'ganjil'),
+            'sabtu_genap'  => $pikets->where('day', 'sabtu')->where('week_type', 'genap'),
+        ];
+
+        return view('user.JadwalPiket', compact('schedule'));
     })->name('piket_schedule');
+
+    // Weekly Checkup
+    Route::get('/weekly-checkup', [App\Http\Controllers\WeeklyReportController::class, 'index'])->name('weekly_checkup');
+    Route::post('/weekly-checkup/generate', [App\Http\Controllers\WeeklyReportController::class, 'generate'])->name('weekly_checkup.generate');
+    Route::get('/weekly-checkup/download/{report}', [App\Http\Controllers\WeeklyReportController::class, 'download'])->name('weekly_checkup.download');
+
+    // Notifications
+    Route::post('/notifications/{id}/mark-as-read', function (\Illuminate\Http\Request $request, $id) {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return response()->json(['success' => true]);
+    })->name('notifications.mark_as_read');
+    
+    // Kanban milestone update
+    Route::patch('/dashboard/milestone/{milestone}/status', [App\Http\Controllers\UserDashboardController::class, 'updateMilestoneStatus'])->name('dashboard.milestone.update_status');
 });
 
 // Admin Routes
@@ -56,9 +82,21 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::put('/users/{user}/role', [AdminDashboardController::class, 'updateRole'])->name('users.role.update');
     Route::get('/projects', [AdminDashboardController::class, 'projects'])->name('projects');
     Route::get('/project-management', [AdminDashboardController::class, 'projectsList'])->name('project.management');
-    Route::get('/check-up', [AdminDashboardController::class, 'checkUp'])->name('checkup');
+    
+    // Weekly Checkup Admin
+    Route::get('/check-up', [App\Http\Controllers\WeeklyReportController::class, 'adminIndex'])->name('checkup');
+    Route::post('/check-up/generate', [App\Http\Controllers\WeeklyReportController::class, 'adminGenerate'])->name('checkup.generate');
+    Route::post('/check-up/generate-master', [App\Http\Controllers\WeeklyReportController::class, 'adminGenerateMaster'])->name('checkup.generate_master');
+    Route::get('/check-up/download/{report}', [App\Http\Controllers\WeeklyReportController::class, 'download'])->name('checkup.download');
+    Route::delete('/check-up/{report}', [App\Http\Controllers\WeeklyReportController::class, 'destroy'])->name('checkup.destroy');
     Route::get('/calendar', [AdminDashboardController::class, 'calendar'])->name('calendar');
     Route::get('/house-rules', [AdminDashboardController::class, 'houseRules'])->name('house.rules');
+    Route::get('/house-rules/create', [AdminDashboardController::class, 'createHouseRule'])->name('house.rules.create');
+    Route::post('/house-rules', [AdminDashboardController::class, 'storeHouseRule'])->name('house.rules.store');
+    Route::get('/house-rules/{houseRule}', [AdminDashboardController::class, 'showHouseRule'])->name('house.rules.show');
+    Route::get('/house-rules/{houseRule}/edit', [AdminDashboardController::class, 'editHouseRule'])->name('house.rules.edit');
+    Route::put('/house-rules/{houseRule}', [AdminDashboardController::class, 'updateHouseRule'])->name('house.rules.update');
+    Route::delete('/house-rules/{houseRule}', [AdminDashboardController::class, 'destroyHouseRule'])->name('house.rules.destroy');
     Route::get('/piket', [AdminDashboardController::class, 'piket'])->name('piket');
     Route::get('/diary', [AdminDashboardController::class, 'diary'])->name('diary');
     
@@ -85,6 +123,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('piket');
     })->name('piket');
 });
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

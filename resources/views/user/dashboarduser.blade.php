@@ -1,10 +1,10 @@
-﻿@include ('user.topbaruser')
+@include ('user.topbaruser')
 <div class="p-container-padding space-y-8">
 <!-- Welcome Hero & CTA -->
 <section class="flex flex-col md:flex-row md:items-end justify-between gap-4">
 <div>
 <h2 class="font-headline-xl text-headline-xl text-on-background">My Projects</h2>
-<p class="font-body-lg text-body-lg text-on-surface-variant">You have 12 active tasks across 3 core projects today.</p>
+<p class="font-body-lg text-body-lg text-on-surface-variant">You have {{ $todoMilestones->count() + $doingMilestones->count() }} active tasks across {{ $activeProjects->count() }} core projects.</p>
 </div>
 <button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-sm">
 <span class="material-symbols-outlined">add_task</span>
@@ -19,41 +19,23 @@
 <h3 class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
 <span class="w-2 h-2 rounded-full bg-outline"></span> TO DO
                         </h3>
-<span class="text-[11px] font-bold px-2 py-0.5 bg-surface-container-highest text-secondary rounded-full">4</span>
+<span class="text-[11px] font-bold px-2 py-0.5 bg-surface-container-highest text-secondary rounded-full">{{ $todoMilestones->count() }}</span>
 </div>
-<div class="space-y-3">
-<!-- Card 1 -->
-<div class="bg-white p-4 rounded-xl custom-shadow border border-transparent hover:border-primary transition-all cursor-grab active:cursor-grabbing">
+<div class="space-y-3 min-h-[150px] kanban-col" id="todo-col" data-status="Pending">
+@forelse($todoMilestones as $ms)
+<div class="bg-white p-4 rounded-xl custom-shadow border border-transparent hover:border-primary transition-all cursor-grab active:cursor-grabbing kanban-card" data-id="{{ $ms->id }}">
 <div class="flex justify-between items-start mb-3">
-<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">INFRASTRUCTURE</span>
-<span class="material-symbols-outlined text-on-surface-variant text-sm">more_horiz</span>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">{{ Str::upper($ms->project->name) }}</span>
 </div>
-<h4 class="font-headline-md text-[16px] text-on-surface mb-2">Cloud Migration Mapping</h4>
-<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 mb-4">Define resource allocation for Q4 migration phase.</p>
-<div class="flex items-center justify-between pt-3 border-t border-outline-variant">
-<div class="flex -space-x-2">
-<img class="w-6 h-6 rounded-full border-2 border-white" data-alt="Close up avatar profile photo of a diverse team member, professional lighting, soft background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAapgBm9j7tWQJWap20GT-4XHFYDc9ZWXnnDZ9BPaI7O8NBTcJ-JA-5KOkpuQeQ05Dt6AxtOq4Vteg3jUqzCd_CN76xeXinDDmMdfV-8MEnjxu2sP3bp3zuVa4SjblqYNC51HHwKgc7976Sj7c2XLR5Wizzll5v7hiBGPAj8KH-HXrp5oDn9WTtjzCwXMzn_TAxFWuxYCgH9a8BFJxB34HW_IRq6n2K0FLUQWBFv9TrPH57QUs3WUj1cWGeVyoDGVAI6FExTQ81GwM"/>
-</div>
-<div class="flex items-center gap-1 text-on-surface-variant">
+<h4 class="font-headline-md text-[16px] text-on-surface mb-2">{{ $ms->title }}</h4>
+<div class="flex items-center gap-1 text-on-surface-variant border-t border-outline-variant pt-3">
 <span class="material-symbols-outlined text-[14px]">calendar_today</span>
-<span class="text-[11px]">Oct 24</span>
+<span class="text-[11px]">{{ $ms->due_date ? \Carbon\Carbon::parse($ms->due_date)->format('M d') : 'No Due Date' }}</span>
 </div>
 </div>
-</div>
-<!-- Card 2 -->
-<div class="bg-white p-4 rounded-xl custom-shadow border border-transparent hover:border-primary transition-all">
-<div class="flex justify-between items-start mb-3">
-<span class="text-[10px] font-bold text-tertiary bg-tertiary/10 px-2 py-0.5 rounded">DESIGN</span>
-</div>
-<h4 class="font-headline-md text-[16px] text-on-surface mb-2">Asset Audit: Iconography</h4>
-<div class="w-full bg-surface-container-low h-1.5 rounded-full mb-3 overflow-hidden">
-<div class="bg-primary h-full w-1/3"></div>
-</div>
-<div class="flex items-center justify-between text-on-surface-variant">
-<span class="text-[11px]">3/10 Assets</span>
-<span class="material-symbols-outlined text-[14px]">attach_file</span>
-</div>
-</div>
+@empty
+<div class="text-center p-4 text-outline text-sm">No tasks pending.</div>
+@endforelse
 </div>
 </div>
 <!-- Doing Column -->
@@ -62,24 +44,24 @@
 <h3 class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
 <span class="w-2 h-2 rounded-full bg-primary"></span> DOING
                         </h3>
-<span class="text-[11px] font-bold px-2 py-0.5 bg-primary/10 text-primary rounded-full">2</span>
+<span class="text-[11px] font-bold px-2 py-0.5 bg-primary/10 text-primary rounded-full">{{ $doingMilestones->count() }}</span>
 </div>
-<div class="space-y-3">
-<div class="bg-white p-4 rounded-xl custom-shadow border-l-4 border-primary">
+<div class="space-y-3 min-h-[150px] kanban-col" id="doing-col" data-status="In Progress">
+@forelse($doingMilestones as $ms)
+<div class="bg-white p-4 rounded-xl custom-shadow border-l-4 border-primary cursor-grab active:cursor-grabbing kanban-card" data-id="{{ $ms->id }}">
 <div class="flex justify-between items-start mb-3">
-<span class="text-[10px] font-bold text-secondary bg-secondary/10 px-2 py-0.5 rounded">OPS-CORE</span>
+<span class="text-[10px] font-bold text-secondary bg-secondary/10 px-2 py-0.5 rounded">{{ Str::upper($ms->project->name) }}</span>
 </div>
-<h4 class="font-headline-md text-[16px] text-on-surface mb-2">Security Patch v2.4 Deployment</h4>
-<div class="flex items-center gap-2 mb-4">
-<span class="bg-error-container text-on-error-container text-[10px] px-2 py-0.5 rounded font-bold">URGENT</span>
-</div>
+<h4 class="font-headline-md text-[16px] text-on-surface mb-2">{{ $ms->title }}</h4>
 <div class="flex items-center justify-between pt-3 border-t border-outline-variant">
-<div class="flex items-center gap-2">
-<img class="w-6 h-6 rounded-full" data-alt="Avatar of a senior technical lead with professional studio lighting, looking confident, modern teal color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlJfMu6raMqI_WXS4J7nxPniL2SLJ7pmtiYYwEAnqNU4sGKMt7Wz1Ie7mILWNsdw1ravxR0nRgPLnj4_5fivWl5X3_IjVIJMLbDp81TtUCtHS-b8pgY1ut3tg205n_0dOwX0yk-8gtnJgbsMQAeCdZQuOv4R9gA1eCMQQEYtiN6f8C5idh6H1TiGFyu8NUrzw_n4FdvaEPq1Tv6NqwOqU0ohtS1nuLb7x_AEkqgCk5IqyE7CxKYI7QIKYBCZirPl36kENERXQCZbw"/>
-<span class="text-[11px] text-on-surface-variant">Assigned to me</span>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="text-[11px]">Due: {{ $ms->due_date ? \Carbon\Carbon::parse($ms->due_date)->format('M d') : '-' }}</span>
 </div>
 </div>
 </div>
+@empty
+<div class="text-center p-4 text-outline text-sm">No active tasks.</div>
+@endforelse
 </div>
 </div>
 <!-- Done Column -->
@@ -88,17 +70,17 @@
 <h3 class="font-label-md text-label-md text-on-surface-variant flex items-center gap-2">
 <span class="w-2 h-2 rounded-full bg-on-tertiary-fixed-variant"></span> DONE
                         </h3>
-<span class="text-[11px] font-bold px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed rounded-full">6</span>
+<span class="text-[11px] font-bold px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed rounded-full">{{ $doneMilestones->count() }}</span>
 </div>
-<div class="space-y-3 opacity-70 grayscale-[0.2]">
-<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30">
-<h4 class="font-headline-md text-[14px] text-on-surface mb-1 line-through">Quarterly Review Deck</h4>
-<p class="text-[11px] text-on-surface-variant">Completed 2 days ago</p>
+<div class="space-y-3 min-h-[150px] opacity-70 grayscale-[0.2] kanban-col" id="done-col" data-status="Done">
+@forelse($doneMilestones as $ms)
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 cursor-grab active:cursor-grabbing kanban-card" data-id="{{ $ms->id }}">
+<h4 class="font-headline-md text-[14px] text-on-surface mb-1 line-through">{{ $ms->title }}</h4>
+<p class="text-[11px] text-on-surface-variant">In: {{ $ms->project->name }}</p>
 </div>
-<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30">
-<h4 class="font-headline-md text-[14px] text-on-surface mb-1 line-through">Onboarding New Hires</h4>
-<p class="text-[11px] text-on-surface-variant">Completed 5 days ago</p>
-</div>
+@empty
+<div class="text-center p-4 text-outline text-sm">No finished tasks.</div>
+@endforelse
 </div>
 </div>
 </div>
@@ -118,26 +100,20 @@
 </div>
 </div>
 <div class="space-y-4">
+@forelse($activeProjects as $proj)
 <div class="flex gap-4 items-start p-3 hover:bg-surface-container-low rounded-lg transition-colors cursor-default">
 <div class="flex flex-col items-center bg-primary-container text-on-primary-container rounded p-2 min-w-[48px]">
-<span class="text-[10px] font-bold uppercase">Oct</span>
-<span class="text-lg font-bold">28</span>
+<span class="text-[10px] font-bold uppercase">{{ \Carbon\Carbon::parse($proj->deadline)->format('M') }}</span>
+<span class="text-lg font-bold">{{ \Carbon\Carbon::parse($proj->deadline)->format('d') }}</span>
 </div>
 <div class="flex-1">
-<p class="font-label-md text-label-md text-on-surface">Sprint Retrospective</p>
-<p class="text-[12px] text-on-surface-variant">10:00 AM - 11:30 AM • Main Hall</p>
+<p class="font-label-md text-label-md text-on-surface">{{ $proj->name }}</p>
+<p class="text-[12px] text-on-surface-variant">Status: {{ $proj->status }}</p>
 </div>
 </div>
-<div class="flex gap-4 items-start p-3 hover:bg-surface-container-low rounded-lg transition-colors cursor-default">
-<div class="flex flex-col items-center bg-secondary-container text-on-secondary-container rounded p-2 min-w-[48px]">
-<span class="text-[10px] font-bold uppercase">Nov</span>
-<span class="text-lg font-bold">02</span>
-</div>
-<div class="flex-1">
-<p class="font-label-md text-label-md text-on-surface">Client Feedback Session</p>
-<p class="text-[12px] text-on-surface-variant">02:00 PM - 03:00 PM • Remote</p>
-</div>
-</div>
+@empty
+<div class="text-center p-4 text-outline text-sm">No project deadlines.</div>
+@endforelse
 </div>
 </section>
 <!-- Rules & Piket (Read Only) -->
@@ -152,26 +128,20 @@
 <span class="text-[11px] font-bold text-secondary uppercase tracking-widest">This Week</span>
 </div>
 <div class="flex justify-between gap-2 overflow-x-auto scrollbar-hide">
-<div class="flex-1 text-center p-2 rounded-lg bg-surface-container-low border border-transparent">
-<p class="text-[10px] text-on-surface-variant">MON</p>
-<p class="font-bold text-on-surface">John D.</p>
+@foreach(['senin' => 'MON', 'selasa' => 'TUE', 'rabu' => 'WED', 'kamis' => 'THU', 'jumat' => 'FRI'] as $dayKey => $dayName)
+@php 
+    $dayPikets = $pikets->where('day', $dayKey); 
+    $isToday = strtolower(\Carbon\Carbon::now()->translatedFormat('l')) == $dayKey;
+@endphp
+<div class="flex-1 text-center p-2 rounded-lg {{ $isToday ? 'bg-primary/10 border border-primary/20' : 'bg-surface-container-low border border-transparent' }}">
+<p class="text-[10px] {{ $isToday ? 'text-primary font-bold' : 'text-on-surface-variant' }}">{{ $dayName }}</p>
+@forelse($dayPikets as $p)
+<p class="font-bold {{ $isToday ? 'text-primary' : 'text-on-surface' }} text-xs">{{ explode(' ', $p->user->name)[0] }}</p>
+@empty
+<p class="text-xs text-outline">-</p>
+@endforelse
 </div>
-<div class="flex-1 text-center p-2 rounded-lg bg-primary/10 border border-primary/20">
-<p class="text-[10px] text-primary font-bold">TUE</p>
-<p class="font-bold text-primary">Me (Alex)</p>
-</div>
-<div class="flex-1 text-center p-2 rounded-lg bg-surface-container-low">
-<p class="text-[10px] text-on-surface-variant">WED</p>
-<p class="font-bold text-on-surface">Sarah K.</p>
-</div>
-<div class="flex-1 text-center p-2 rounded-lg bg-surface-container-low">
-<p class="text-[10px] text-on-surface-variant">THU</p>
-<p class="font-bold text-on-surface">Mike R.</p>
-</div>
-<div class="flex-1 text-center p-2 rounded-lg bg-surface-container-low">
-<p class="text-[10px] text-on-surface-variant">FRI</p>
-<p class="font-bold text-on-surface">Elena V.</p>
-</div>
+@endforeach
 </div>
 </section>
 <!-- House Rules -->
@@ -184,18 +154,14 @@
 <a class="text-primary text-[11px] font-bold hover:underline" href="#">View Full Policy</a>
 </div>
 <ul class="space-y-3">
+@forelse($houseRules as $rule)
 <li class="flex items-start gap-3">
 <span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
-<span class="text-body-md text-on-surface-variant">Meeting rooms must be booked 24h in advance.</span>
+<span class="text-body-md text-on-surface-variant">{{ $rule->title }}</span>
 </li>
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
-<span class="text-body-md text-on-surface-variant">Quiet hours are strictly 1:00 PM to 3:00 PM.</span>
-</li>
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
-<span class="text-body-md text-on-surface-variant">Project Diaries must be submitted daily before 5:00 PM.</span>
-</li>
+@empty
+<li class="text-outline text-sm">No house rules defined.</li>
+@endforelse
 </ul>
 </section>
 </div>
@@ -276,6 +242,42 @@
             });
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'translateY(0px)';
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cols = document.querySelectorAll('.kanban-col');
+            cols.forEach(col => {
+                new Sortable(col, {
+                    group: 'kanban',
+                    animation: 150,
+                    ghostClass: 'bg-primary/10',
+                    onEnd: function (evt) {
+                        const itemEl = evt.item;
+                        const toList = evt.to;
+                        const newStatus = toList.getAttribute('data-status');
+                        const milestoneId = itemEl.getAttribute('data-id');
+                        
+                        if (evt.from !== evt.to) {
+                            fetch(`/user/dashboard/milestone/${milestoneId}/status`, {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({ status: newStatus })
+                            }).then(res => res.json()).then(data => {
+                                if (!data.success) {
+                                    alert('Failed to update status');
+                                }
+                            }).catch(err => {
+                                console.error('Error updating status:', err);
+                            });
+                        }
+                    }
+                });
             });
         });
     </script>

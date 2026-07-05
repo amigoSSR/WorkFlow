@@ -30,7 +30,7 @@ class EventController extends Controller
             'description' => 'nullable|string',
             'type'        => 'required|in:meeting,lunch,exercise,outbound,movie_day',
             'start_date'  => 'required|date',
-            'location'    => 'nullable|string|max:200',
+            'location'    => 'nullable|string|max:2048',
         ]);
 
         Event::create([

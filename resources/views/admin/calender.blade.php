@@ -136,7 +136,13 @@
                 ];
                 [$ebg,$etxt] = $uc[$event->type] ?? ['rgba(0,0,0,0.05)','#000'];
             @endphp
-            <div class="event event-item cursor-pointer group relative" data-type="{{ $event->type }}" style="background:{{ $ebg }};color:{{ $etxt }};border-left:4px solid {{ $etxt }}" onclick="event.stopPropagation()">
+            <div class="event event-item cursor-pointer group relative" data-type="{{ $event->type }}" 
+                data-title="{{ $event->title }}"
+                data-date="{{ \Carbon\Carbon::parse($event->start_date)->format('d F Y') }}"
+                data-location="{{ $event->location }}"
+                data-desc="{{ $event->description }}"
+                style="background:{{ $ebg }};color:{{ $etxt }};border-left:4px solid {{ $etxt }}" 
+                onclick="event.stopPropagation(); openEventDetailModal(this)">
                 <div class="flex items-center justify-between">
                     <span class="truncate">{{ $event->title }}</span>
                     <form action="{{ route('admin.events.destroy', $event) }}" method="POST" class="inline" onsubmit="return confirm('Hapus event ini?')">
@@ -190,12 +196,15 @@
             <span class="text-label-md font-bold {{ $etxt }}">{{ \Carbon\Carbon::parse($ev->start_date)->format('d') }}</span>
             <span class="text-[10px] text-on-surface-variant uppercase">{{ \Carbon\Carbon::parse($ev->start_date)->format('D') }}</span>
             </div>
-            <div class="bg-white p-3 rounded-lg border border-outline-variant flex-1 shadow-sm transition-all">
-                <p class="font-label-md text-label-md text-on-surface mb-1">{{ $ev->title }}</p>
-                <div class="text-[11px] text-on-surface-variant flex flex-col gap-1">
-                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">label</span> {{ ucfirst($ev->type) }}</span>
+            <div class="bg-white p-3 rounded-lg border border-outline-variant flex-1 shadow-sm transition-all overflow-hidden">
+                <p class="font-label-md text-label-md text-on-surface mb-1 truncate" title="{{ $ev->title }}">{{ $ev->title }}</p>
+                <div class="text-[11px] text-on-surface-variant flex flex-col gap-1 w-full">
+                    <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] shrink-0">label</span> {{ ucfirst($ev->type) }}</span>
                     @if($ev->location)
-                        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> {{ $ev->location }}</span>
+                        <span class="flex items-center gap-1 overflow-hidden" title="{{ $ev->location }}">
+                            <span class="material-symbols-outlined text-[14px] shrink-0">location_on</span> 
+                            <span class="truncate">{{ $ev->location }}</span>
+                        </span>
                     @endif
                 </div>
             </div>
@@ -277,6 +286,51 @@
     </div>
 </div>
 
+{{-- MODAL DETAIL EVENT --}}
+<div id="eventDetailModal" class="hidden fixed inset-0 z-[105] flex items-center justify-center p-4 bg-on-background/40 backdrop-blur-sm" onclick="closeEventDetailModal()">
+    <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
+        <div class="px-6 py-5 border-b border-outline-variant/30 flex items-center justify-between bg-surface-container-low/40">
+            <h3 class="font-headline-md text-headline-md text-on-background">Detail Event</h3>
+            <button onclick="closeEventDetailModal()" class="text-on-surface-variant hover:text-error transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="p-6 overflow-y-auto custom-scrollbar space-y-5">
+            <div>
+                <p class="text-[11px] font-bold text-primary uppercase tracking-widest mb-1" id="detailType">MEETING</p>
+                <h4 class="font-headline-lg text-[22px] text-on-surface leading-tight" id="detailTitle">Event Title</h4>
+            </div>
+            
+            <div class="flex items-start gap-3 text-on-surface-variant">
+                <span class="material-symbols-outlined text-[20px] text-primary mt-0.5">calendar_today</span>
+                <div>
+                    <p class="font-label-md text-[13px] uppercase tracking-wider text-outline mb-0.5">Tanggal</p>
+                    <p class="text-body-md font-semibold text-on-surface" id="detailDate">12 Oct 2023</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-3 text-on-surface-variant" id="detailLocationContainer">
+                <span class="material-symbols-outlined text-[20px] text-primary mt-0.5">location_on</span>
+                <div class="w-full overflow-hidden">
+                    <p class="font-label-md text-[13px] uppercase tracking-wider text-outline mb-0.5">Lokasi / Link</p>
+                    <p class="text-body-md font-semibold text-on-surface break-words" id="detailLocation">Room 304</p>
+                </div>
+            </div>
+
+            <div class="flex items-start gap-3 text-on-surface-variant" id="detailDescContainer">
+                <span class="material-symbols-outlined text-[20px] text-primary mt-0.5">notes</span>
+                <div class="w-full">
+                    <p class="font-label-md text-[13px] uppercase tracking-wider text-outline mb-0.5">Deskripsi</p>
+                    <p class="text-body-md text-on-surface" id="detailDesc">Deskripsi event...</p>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 border-t border-outline-variant/30 bg-surface-container-lowest flex justify-end">
+            <button onclick="closeEventDetailModal()" class="px-6 py-2 bg-surface-container-highest hover:bg-surface-variant text-on-surface font-semibold rounded-lg transition-colors">Tutup</button>
+        </div>
+    </div>
+</div>
+
 <style>
 .type-option input:checked ~ * { font-weight: 700; }
 </style>
@@ -295,6 +349,45 @@ function filterEvents(type) {
 function openModalWithDate(date) {
     document.getElementById('start_date').value = date;
     document.getElementById('eventModal').classList.remove('hidden');
+}
+
+function openEventDetailModal(element) {
+    const title = element.getAttribute('data-title');
+    const type = element.getAttribute('data-type');
+    const date = element.getAttribute('data-date');
+    const location = element.getAttribute('data-location');
+    const desc = element.getAttribute('data-desc');
+
+    document.getElementById('detailTitle').textContent = title;
+    document.getElementById('detailType').textContent = type.replace('_', ' ');
+    document.getElementById('detailDate').textContent = date;
+    
+    const locContainer = document.getElementById('detailLocationContainer');
+    if (location) {
+        locContainer.style.display = 'flex';
+        const locEl = document.getElementById('detailLocation');
+        if (location.startsWith('http://') || location.startsWith('https://')) {
+            locEl.innerHTML = `<a href="${location}" target="_blank" class="text-primary hover:underline break-all">${location}</a>`;
+        } else {
+            locEl.textContent = location;
+        }
+    } else {
+        locContainer.style.display = 'none';
+    }
+
+    const descContainer = document.getElementById('detailDescContainer');
+    if (desc) {
+        descContainer.style.display = 'flex';
+        document.getElementById('detailDesc').textContent = desc;
+    } else {
+        descContainer.style.display = 'none';
+    }
+
+    document.getElementById('eventDetailModal').classList.remove('hidden');
+}
+
+function closeEventDetailModal() {
+    document.getElementById('eventDetailModal').classList.add('hidden');
 }
 
 document.querySelectorAll('.type-option input[type="radio"]').forEach(radio => {

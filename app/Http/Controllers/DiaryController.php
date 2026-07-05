@@ -135,4 +135,25 @@ class DiaryController extends Controller
 
         return redirect()->back()->with('success', 'Link berhasil dibagikan.');
     }
+
+    /**
+     * Update milestone status.
+     */
+    public function updateMilestoneStatus(Request $request, $milestone_id)
+    {
+        $user = Auth::user();
+        $milestone = Milestone::findOrFail($milestone_id);
+        // Ensure user is in the project
+        $user->projects()->where('projects.id', $milestone->project_id)->firstOrFail();
+
+        $request->validate([
+            'status' => 'required|in:Pending,In Progress,Done',
+        ]);
+
+        $milestone->update([
+            'status' => $request->status
+        ]);
+
+        return redirect()->back()->with('success', 'Status milestone berhasil diperbarui.');
+    }
 }

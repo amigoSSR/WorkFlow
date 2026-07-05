@@ -119,6 +119,7 @@
             ['name' => 'Calendar', 'icon' => 'calendar_today', 'url' => url('user/calendar')],
             ['name' => 'House Rules', 'icon' => 'gavel', 'url' => url('user/houseRule')],
             ['name' => 'Piket Schedule', 'icon' => 'schedule', 'url' => url('user/piket_schedule')],
+            ['name' => 'Weekly Checkup', 'icon' => 'fact_check', 'url' => url('user/weekly-checkup')],
         ];
     @endphp
 
@@ -160,7 +161,33 @@
 </div>
 <div class="flex items-center gap-6">
 <div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
+<div class="relative cursor-pointer" onclick="toggleNotifications()">
+    <span class="material-symbols-outlined text-on-surface-variant hover:text-primary relative">
+        notifications
+        @if(auth()->user()->unreadNotifications->count() > 0)
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full border-2 border-surface"></span>
+        @endif
+    </span>
+    <!-- Dropdown -->
+    <div id="notifDropdown" class="hidden absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg border border-outline-variant/30 overflow-hidden z-50 cursor-default" onclick="event.stopPropagation()">
+        <div class="p-4 bg-surface-container-lowest border-b border-outline-variant/30 flex justify-between items-center">
+            <h4 class="font-bold text-on-surface">Notifications</h4>
+            @if(auth()->user()->unreadNotifications->count() > 0)
+                <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-bold" id="notifCountBadge">{{ auth()->user()->unreadNotifications->count() }} New</span>
+            @endif
+        </div>
+        <div class="max-h-80 overflow-y-auto">
+            @forelse(auth()->user()->notifications->take(10) as $notif)
+                <div class="p-4 border-b border-outline-variant/20 hover:bg-surface-bright transition-colors cursor-pointer {{ is_null($notif->read_at) ? 'bg-primary/5' : '' }}" onclick="markNotifRead('{{ $notif->id }}', this)">
+                    <p class="text-sm text-on-surface mb-1">{{ $notif->data['message'] ?? 'New notification' }}</p>
+                    <p class="text-[10px] text-outline">{{ $notif->created_at->diffForHumans() }}</p>
+                </div>
+            @empty
+                <div class="p-6 text-center text-outline text-sm">No notifications yet.</div>
+            @endforelse
+        </div>
+    </div>
+</div>
 <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">history</span>
 </div>
 <div class="flex items-center gap-3 pl-6 border-l border-outline-variant">
@@ -172,3 +199,38 @@
 </div>
 </div>
 </header>
+
+<script>
+    function toggleNotifications() {
+        const dropdown = document.getElementById('notifDropdown');
+        dropdown.classList.toggle('hidden');
+    }
+
+    // Close when clicking outside
+    document.addEventListener('click', function(event) {
+        const notifContainer = document.querySelector('[onclick="toggleNotifications()"]');
+        if (notifContainer && !notifContainer.contains(event.target)) {
+            document.getElementById('notifDropdown').classList.add('hidden');
+        }
+    });
+
+    function markNotifRead(id, element) {
+        if (!element.classList.contains('bg-primary/5')) {
+            // Already read
+            return;
+        }
+
+        fetch(`/user/notifications/${id}/mark-as-read`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        }).then(res => res.json()).then(data => {
+            if (data.success) {
+                element.classList.remove('bg-primary/5');
+                // Optional: decrease badge count
+            }
+        });
+    }
+</script>
